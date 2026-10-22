@@ -126,7 +126,7 @@
     }));
     $$('#fields-form [data-upload]').forEach(input => input.addEventListener('change', () => uploadImage(input, m)));
     if (selected === 'hero') {
-      const button = document.createElement('button'); button.type = 'button'; button.className = 'preview-envelope-button'; button.textContent = 'Ver el sobre en la vista previa ↗';
+      const button = document.createElement('button'); button.type = 'button'; button.className = 'preview-envelope-button'; button.textContent = 'Ver el sobre en la vista previa';
       button.addEventListener('click', () => { window.AdminSections.workspace('preview'); updatePreview(false); $('#preview').contentWindow.postMessage({ type: 'boda:envelope' }, location.origin); });
       $('#fields-form').append(button);
     }
@@ -167,7 +167,7 @@
       if (revision === savedRevision) { dirty = false; $('.status-dot').classList.remove('dirty'); $('#pending-edit-indicator').hidden = true; $('#save-status').textContent = 'Todos los cambios guardados'; }
       toast('Invitación actualizada. Los cambios ya están guardados en el proyecto.');
     } catch (error) { toast(error.message || 'No fue posible guardar. Tus cambios siguen en el editor.'); }
-    finally { saving = false; $('#save-button').innerHTML = 'Guardar cambios <span>↗</span>'; $('#save-button').disabled = !dirty; }
+    finally { saving = false; $('#save-button').innerHTML = 'Guardar cambios'; $('#save-button').disabled = !dirty; }
   }
   function download(value, type, name) { const url = URL.createObjectURL(new Blob([value], { type })); const a = document.createElement('a'); a.href = url; a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
   async function loadGuests() {

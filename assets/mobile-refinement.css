@@ -1,0 +1,172 @@
+/* Phone layout, loaded after the invitation's visual theme. */
+@media (max-width: 700px) {
+  html { scroll-padding-top: calc(92px + env(safe-area-inset-top)); }
+  .site-header {
+    height: calc(76px + env(safe-area-inset-top));
+    padding: env(safe-area-inset-top) max(20px, env(safe-area-inset-right)) 0 max(20px, env(safe-area-inset-left));
+  }
+  .site-header nav {
+    top: calc(84px + env(safe-area-inset-top));
+    max-height: calc(100dvh - 190px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .sound-toggle { top: calc(16px + env(safe-area-inset-top)); right: max(76px, calc(56px + env(safe-area-inset-right))); }
+  .mobile-dock {
+    left: max(12px, env(safe-area-inset-left));
+    right: max(12px, env(safe-area-inset-right));
+    bottom: calc(10px + env(safe-area-inset-bottom));
+  }
+  .mobile-dock a { min-height: 56px; padding: 6px 2px; font-size: 11px; line-height: 1.3; text-align: center; }
+  .mobile-dock a span { max-width: 100%; overflow-wrap: anywhere; }
+  main section { scroll-margin-top: 0; scroll-margin-bottom: calc(100px + env(safe-area-inset-bottom)); }
+  footer { padding-bottom: calc(120px + env(safe-area-inset-bottom)); }
+  .toast { bottom: calc(94px + env(safe-area-inset-bottom)); font-size: 13px; line-height: 1.6; }
+
+  .section-wrap { padding: 72px 22px; }
+  .section-intro h2, .welcome h2, .couple-story h2, .rsvp h2 {
+    font-size: clamp(36px, 10.5vw, 46px);
+    line-height: 1.12;
+    text-wrap: balance;
+    overflow-wrap: break-word;
+  }
+  .section-intro p, .gallery .section-intro p, .couple-story .section-intro > p, .welcome-copy > p,
+  .venue-copy > p, .detail-panel > p, .rsvp-copy > p { font-size: 16px; line-height: 1.8; }
+  .eyebrow { font-size: 10px; line-height: 1.7; letter-spacing: 1.6px; }
+  .button, .text-link { max-width: 100%; min-height: 48px; font-size: 15px; line-height: 1.5; text-align: center; overflow-wrap: anywhere; }
+  .button { flex-wrap: wrap; gap: 8px 12px; padding: 14px 20px; }
+
+  .hero.botanical-hero { padding: 28px clamp(27px, 8vw, 38px) 40px; }
+  .hero.botanical-hero .welcome-eyebrow { font-size: 10px; letter-spacing: 1.5px; }
+  .welcome-introduction, .welcome-blessing { font-size: 16px; line-height: 1.75; }
+  .welcome-title { font-size: clamp(44px, 13vw, 62px); }
+  .welcome-names { font-size: clamp(46px, 12vw, 60px); gap: 5px 10px; flex-wrap: wrap; white-space: normal; }
+  .welcome-names b { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+  .welcome-couple { height: clamp(300px, 92vw, 380px); }
+  .botanical-hero .hero-full-names { font-size: 12px; line-height: 1.8; max-width: 100%; }
+  .botanical-hero .hero-full-names span { overflow-wrap: anywhere; }
+  .botanical-hero .hero-event-ticket { padding: 16px 12px; }
+  .botanical-hero .hero-date-teaser > span { min-width: 0; }
+  .botanical-hero .hero-date-teaser strong { font-size: 25px; }
+  .botanical-hero .hero-date-teaser small { font-size: 10px; line-height: 1.6; letter-spacing: .5px; }
+  .botanical-hero .hero-date { flex-wrap: wrap; }
+  .botanical-hero .hero-location { font-size: 13px; line-height: 1.65; }
+  .botanical-hero .hero-location span { min-width: 0; overflow-wrap: anywhere; }
+  .botanical-hero .hero-actions { gap: 10px; }
+  .botanical-hero .hero-actions .button { min-height: 52px; }
+  .welcome-photo-link { font-size: 12px; min-height: 52px; }
+  .welcome-photo-link img { width: 44px; height: 44px; flex-shrink: 0; }
+  .welcome-photo-link > span { min-width: 0; overflow-wrap: anywhere; }
+  .botanical-hero .hero-discover { font-size: 10px; letter-spacing: 1px; }
+
+  .countdown { padding: 64px 20px 72px; }
+  .countdown h2 { font-size: clamp(34px, 10vw, 42px); }
+  .scratch-experience { min-width: 0; width: 100%; }
+  .scratch-instruction { font-size: 15px; line-height: 1.7; }
+  .scratch-time, .scratch-surface { min-height: 236px; }
+  .scratch-time { padding: 26px 10px; }
+  .scratch-time .time-unit > strong { font-size: clamp(36px, 10vw, 48px); }
+  .scratch-time .time-unit > span { font-size: 10px; line-height: 1.5; overflow-wrap: anywhere; }
+  .scratch-kicker { font-size: 10px; letter-spacing: .8px; }
+  .scratch-cover-label strong { font-size: clamp(28px, 8vw, 36px); text-align: center; }
+  .scratch-cover-label span { font-size: 12px; letter-spacing: .3px; text-align: center; }
+  .scratch-status { font-size: 13px; line-height: 1.6; }
+  .scratch-actions { flex-wrap: wrap; gap: 8px 16px; }
+  .scratch-actions button { min-height: 44px; font-size: 14px; }
+
+  .couple-story > .section-wrap { padding: 72px 22px 12px; }
+  .story-scene-shell:before { right: 0; font-size: 260px; }
+  .story-scene-meta { flex-wrap: wrap; font-size: 10px; }
+  .story-mode-mobile { font-size: 10px; letter-spacing: .3px; }
+  .story-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .story-tabs button { min-width: 0; min-height: 52px; padding: 10px 5px; flex-direction: column; gap: 4px; font-size: 12px; line-height: 1.35; text-align: center; overflow-wrap: anywhere; }
+  .story-tabs button span { font-size: 10px; }
+  .story-stage { height: clamp(280px, 85vw, 360px); }
+  .story-caption h3 { font-size: clamp(34px, 10vw, 44px); line-height: 1.15; }
+  .story-caption p { font-size: 16px; line-height: 1.8; }
+  .story-controls { flex-wrap: wrap; gap: 8px; }
+  .story-controls button { min-height: 44px; font-size: 13px; padding: 10px; }
+
+  .welcome { padding: 72px 26px; }
+  .welcome-image-wrap { width: calc(100% - 24px); }
+  .welcome-image { height: auto; aspect-ratio: 3 / 4; object-fit: cover; }
+  .timeline-item { grid-template-columns: 40px minmax(0, 1fr); column-gap: 12px; padding: 24px 18px; }
+  .timeline-icon { width: 40px; height: 40px; }
+  .timeline h3 { font-size: 29px; line-height: 1.15; }
+  .timeline p { font-size: 16px; line-height: 1.75; }
+  .timeline .event-time { font-size: 12px; max-width: 100%; }
+  .venue-copy { padding: 32px 24px; min-width: 0; }
+  .venue-copy h3 { font-size: clamp(32px, 9vw, 40px); overflow-wrap: break-word; }
+  .venue-image { height: auto; min-height: 0; aspect-ratio: 4 / 3; }
+  .venue-copy .button { width: 100%; }
+
+  .gallery { padding: 72px 22px; }
+  .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
+  .gallery-item, .gallery-item:nth-child(2), .gallery-item:last-child {
+    display: flex; flex-direction: column; height: auto; min-width: 0;
+    padding: 7px 7px 12px; margin: 0; width: 100%; transform: none;
+  }
+  .gallery-item:last-child { grid-column: 1 / -1; width: 88%; justify-self: center; }
+  .gallery-item img { display: block; flex-shrink: 0; height: auto; aspect-ratio: 3 / 4; width: 100%; border-radius: 8px; }
+  .gallery-photo-label, .gallery-item:last-child .gallery-photo-label {
+    position: static; display: block; margin: 10px 2px 0; max-width: 100%;
+    font-size: clamp(20px, 5.5vw, 25px); line-height: 1.25; text-align: left; overflow-wrap: anywhere;
+  }
+  .gallery-index { top: 14px; left: 14px; }
+  .album-footer { gap: 18px; }
+  .album-footer .gallery-caption { font-size: 13px; line-height: 1.7; }
+  .album-footer .button { width: 100%; justify-content: center; }
+  .album-footer .button span { font-size: 12px; }
+
+  .detail-tabs { gap: 6px; }
+  .detail-tab { min-height: 48px; padding: 10px 12px; font-size: 15px; line-height: 1.5; }
+  .detail-panel { padding: 28px 22px; min-width: 0; }
+  .rsvp .section-wrap { padding: 72px 20px; gap: 32px; }
+  .rsvp .rsvp-deadline { font-size: 12px; line-height: 1.7; }
+  .rsvp .rsvp-form { min-width: 0; width: 100%; padding: 26px 20px; }
+  .rsvp-form .field { font-size: 14px; min-width: 0; }
+  .rsvp-form input, .rsvp-form textarea { min-width: 0; max-width: 100%; font-size: 16px; }
+  .rsvp-form .form-subtitle { font-size: 13px; line-height: 1.6; }
+  .form-heading > div { min-width: 0; }
+  .form-heading .form-intro { font-size: 29px; line-height: 1.2; }
+  .attendance-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
+  .attendance-choice, .attendance-card { height: 100%; }
+  .attendance-card { padding: 14px 11px; overflow-wrap: anywhere; }
+  .attendance-card b { font-size: 14px; }
+  .attendance-card small { font-size: 12px; }
+  .guest-field { flex-wrap: wrap; gap: 14px; }
+  .guest-field > div:first-child { flex: 1 1 120px; min-width: 0; }
+  .guest-field label { font-size: 14px; }
+  .guest-field p { font-size: 13px; line-height: 1.6; }
+  .guest-stepper { gap: 2px; }
+  .guest-stepper button { width: 44px; height: 44px; }
+  .guest-stepper input { width: 32px; font-size: 16px; }
+  .rsvp-form .companion-fields { padding: 16px 13px 0; }
+  .rsvp-form .companion-fields > p { font-size: 13px; line-height: 1.7; }
+  .rsvp-message .message-label { flex-wrap: wrap; gap: 4px 12px; }
+  .rsvp-message textarea { min-height: 125px; }
+  .rsvp-form .form-note { font-size: 12px; line-height: 1.7; }
+
+  .invitation-opening { padding: calc(32px + env(safe-area-inset-top)) 22px calc(28px + env(safe-area-inset-bottom)); }
+  #invitation-names { flex-wrap: wrap; font-size: clamp(40px, 12vw, 64px); overflow-wrap: anywhere; }
+  .invitation-message { font-size: 16px; line-height: 1.75; }
+  .invitation-touch { font-size: 11px; line-height: 1.6; }
+  .invitation-skip { max-width: 100%; font-size: 13px; line-height: 1.6; }
+  .envelope { flex-shrink: 0; width: min(360px, 100%); }
+  .letter-dialog { width: calc(100% - 32px); padding: 58px 24px 32px; max-height: calc(100dvh - 40px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+  .letter-dialog #letter-text { font-size: 23px; line-height: 1.55; }
+  .gallery-dialog { width: calc(100% - 24px); max-width: 100%; padding: 56px 0; }
+  .gallery-dialog img { max-height: calc(100dvh - 190px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+  .gallery-dialog .dialog-close, .gallery-prev, .gallery-next, .letter-dialog .dialog-close { width: 44px; height: 44px; }
+  .gallery-dialog .dialog-close { top: 0; right: 0; }
+  .gallery-prev, .gallery-next { top: auto; bottom: 0; transform: none; }
+  .gallery-prev { left: calc(50% - 74px); }
+  .gallery-next { right: calc(50% - 74px); }
+  .gallery-counter { font-size: 12px; line-height: 1.5; letter-spacing: 1px; }
+}
+
+@media (max-width: 350px) {
+  .attendance-grid { grid-template-columns: minmax(0, 1fr); }
+  .attendance-card { min-height: 110px; }
+  .botanical-hero .hero-date-teaser strong { font-size: 23px; }
+}

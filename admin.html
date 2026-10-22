@@ -11,7 +11,7 @@
   <header class="admin-header">
     <a class="admin-brand" href="/admin" aria-label="Administración de Miller y Daniela">M<span>&</span>D <i>ADMINISTRACIÓN</i></a>
     <div class="admin-breadcrumb"><span>Tu boda</span><i aria-hidden="true">/</i><strong id="admin-current-view">Invitación</strong></div>
-    <div class="header-actions"><div class="header-center"><span class="status-dot"></span><span id="save-status" role="status" aria-live="polite">Cargando invitación…</span></div><a class="view-invitation" href="/" target="_blank" rel="noopener">Ver invitación <span aria-hidden="true">↗</span></a><button id="save-button" class="primary" disabled>Guardar cambios <span aria-hidden="true">↗</span></button></div>
+    <div class="header-actions"><div class="header-center"><span class="status-dot"></span><span id="save-status" role="status" aria-live="polite">Cargando invitación…</span></div><a class="view-invitation" href="/" target="_blank" rel="noopener">Ver invitación</a><button id="save-button" class="primary" disabled>Guardar cambios</button></div>
   </header>
   <div class="admin-layout" data-view="modules" data-workspace="edit">
     <aside class="sidebar">
@@ -44,7 +44,7 @@
           <section id="account-editor" hidden>
   <div class="page-heading"><span class="eyebrow">CONFIGURACIÓN PRIVADA</span><h2>Cuenta y respaldos</h2><p class="editor-help">Administra tu acceso y conserva una copia de los textos y ajustes de la invitación.</p></div>
   <div class="account-grid">
-    <article class="settings-card"><span class="settings-icon" aria-hidden="true">01</span><h3>Tu acceso</h3><p>Sesión iniciada como <strong id="account-username">…</strong>.</p><p>Actualiza tu contraseña cuando lo necesites. Las otras sesiones se cerrarán al cambiarla.</p><div class="settings-actions"><button type="button" id="password-button" class="secondary">Cambiar contraseña</button><button type="button" id="logout-button" class="account-action">Cerrar sesión <span aria-hidden="true">↗</span></button></div></article>
+    <article class="settings-card"><span class="settings-icon" aria-hidden="true">01</span><h3>Tu acceso</h3><p>Sesión iniciada como <strong id="account-username">…</strong>.</p><p>Actualiza tu contraseña cuando lo necesites. Las otras sesiones se cerrarán al cambiarla.</p><div class="settings-actions"><button type="button" id="password-button" class="secondary">Cambiar contraseña</button><button type="button" id="logout-button" class="account-action">Cerrar sesión</button></div></article>
     <article class="settings-card"><span class="settings-icon" aria-hidden="true">02</span><h3>Respaldar la invitación</h3><p>Descarga los textos y ajustes para conservarlos o restaurarlos después. Las imágenes y los invitados se respaldan por separado.</p><button type="button" id="export-content" class="secondary">Descargar contenido JSON ↓</button></article>
     <article class="settings-card"><span class="settings-icon" aria-hidden="true">03</span><h3>Restaurar contenido</h3><p>Selecciona un respaldo de esta invitación. Podrás revisar el resultado y guardar los cambios desde Invitación.</p><label class="backup-upload">Archivo de respaldo<input id="import-content" type="file" accept="application/json,.json"><span>Archivo JSON de esta invitación.</span></label></article>
   </div>

@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f8f5e9">
   <meta name="description" content="Miller y Daniela celebran su matrimonio cristiano. Acompáñanos en nuestra unión delante de Dios.">
   <title>Miller & Daniela · Nuestra boda</title>
@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="/assets/ui-polish.css">
   <link rel="stylesheet" href="/assets/botanical-wedding.css">
   <link rel="stylesheet" href="/assets/music.css">
+  <link rel="stylesheet" href="/assets/mobile-refinement.css">
   <script src="/assets/module-copy.js" defer></script>
   <script src="/assets/gsap.min.js" defer></script>
   <script src="/assets/ScrollTrigger.min.js" defer></script>
@@ -31,16 +32,16 @@
   <header class="site-header">
     <a class="monogram" href="#hero" aria-label="Miller y Daniela, inicio">M<span>&</span>D<i>NUESTRA BODA</i></a>
     <nav id="primary-navigation" aria-label="Navegación principal"><a href="#hero" data-module-link="hero">Invitación</a><a href="#illustrations" data-module-link="illustrations">Nuestra historia</a><a href="#celebration" data-module-link="celebration">El gran día</a><a href="#gallery" data-module-link="gallery">Álbum</a><a href="#details" data-module-link="details">Detalles</a></nav>
-    <a class="nav-rsvp" href="#rsvp" data-module-link="rsvp">Confirmar asistencia <span>↗</span></a>
+    <a class="nav-rsvp" href="#rsvp" data-module-link="rsvp">Confirmar asistencia</a>
     <button class="menu-toggle" aria-label="Abrir menú" aria-controls="primary-navigation" aria-expanded="false"><span></span><span></span></button>
   </header>
   <main id="main"><div class="initial-loading">M <span>&</span> D</div></main>
   <nav class="mobile-dock" aria-label="Accesos de la invitación"><a href="#hero" data-module-link="hero"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3 7 9 6 9-6"/></svg><span>Invitación</span></a><a href="#illustrations" data-module-link="illustrations"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20 5c-3-3-7-1-8 2-1-3-5-5-8-2-5 5 4 11 8 14 4-3 13-9 8-14Z"/></svg><span>Historia</span></a><a href="#gallery" data-module-link="gallery"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 5-5 4 4 4-6 5 7"/></svg><span>Álbum</span></a><a href="#rsvp" data-module-link="rsvp" class="dock-confirm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg><span>Confirmar</span></a></nav>
-  <footer><a class="footer-monogram" href="#hero">M <i>&</i> D</a><p>Un hogar que comienza con la bendición de Dios.</p><button type="button" class="reopen-invitation">Volver a abrir la invitación <span aria-hidden="true">↗</span></button><span id="demo-note"></span><small>HECHO CON AMOR, PARA CELEBRAR EL AMOR</small></footer>
+  <footer><a class="footer-monogram" href="#hero">M <i>&</i> D</a><p>Un hogar que comienza con la bendición de Dios.</p><button type="button" class="reopen-invitation">Volver a abrir la invitación</button><span id="demo-note"></span><small>HECHO CON AMOR, PARA CELEBRAR EL AMOR</small></footer>
   <button type="button" class="sound-toggle" aria-label="Reproducir nuestra canción" aria-pressed="false" hidden><span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="sound-label">Nuestra canción</span></button>
   <div id="wedding-music" class="music-background" aria-hidden="true"></div>
   <div class="scroll-progress" aria-hidden="true"></div>
-  <dialog id="invitation-dialog" aria-labelledby="invitation-names"><div class="invitation-opening"><span class="invitation-eyebrow"></span><h2 id="invitation-names"></h2><p class="invitation-message"></p><div class="envelope"><div class="envelope-back"></div><div class="envelope-letter"><span>CON TODO NUESTRO AMOR</span><strong class="letter-couple"></strong><i>♡</i><time class="letter-date"></time><p>Un hogar que comienza con la bendición de Dios.</p></div><div class="envelope-fold envelope-fold-left"></div><div class="envelope-fold envelope-fold-right"></div><div class="envelope-fold envelope-fold-bottom"></div><div class="envelope-flap"></div><button type="button" class="envelope-seal" aria-label="Abrir nuestra invitación"><span class="seal-initials"></span><i aria-hidden="true">♡</i></button></div><p class="invitation-touch">TOCA EL SELLO PARA ABRIR</p><button type="button" class="invitation-skip">Ir directamente a la invitación <span aria-hidden="true">↗</span></button></div></dialog>
+  <dialog id="invitation-dialog" aria-labelledby="invitation-names"><div class="invitation-opening"><span class="invitation-eyebrow"></span><h2 id="invitation-names"></h2><p class="invitation-message"></p><div class="envelope"><div class="envelope-back"></div><div class="envelope-letter"><span>CON TODO NUESTRO AMOR</span><strong class="letter-couple"></strong><i>♡</i><time class="letter-date"></time><p>Un hogar que comienza con la bendición de Dios.</p></div><div class="envelope-fold envelope-fold-left"></div><div class="envelope-fold envelope-fold-right"></div><div class="envelope-fold envelope-fold-bottom"></div><div class="envelope-flap"></div><button type="button" class="envelope-seal" aria-label="Abrir nuestra invitación"><span class="seal-initials"></span><i aria-hidden="true">♡</i></button></div><p class="invitation-touch">TOCA EL SELLO PARA ABRIR</p><button type="button" class="invitation-skip">Ir directamente a la invitación</button></div></dialog>
   <dialog id="letter-dialog" class="letter-dialog"><button class="dialog-close" aria-label="Cerrar carta">×</button><span class="eyebrow">UNA CARTA PARA TI</span><span class="letter-heart">♡</span><div id="letter-text"></div><p class="letter-signature">Con amor, M & D</p></dialog>
   <dialog id="gallery-dialog" class="gallery-dialog"><button class="dialog-close" aria-label="Cerrar fotografía">×</button><button class="gallery-prev" aria-label="Fotografía anterior">←</button><img src="/assets/garden.webp" alt="Inspiración para nuestra boda"><button class="gallery-next" aria-label="Siguiente fotografía">→</button><p class="gallery-counter"></p></dialog>
   <div class="toast" role="status" aria-live="polite"></div>

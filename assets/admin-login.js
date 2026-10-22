@@ -18,7 +18,7 @@
       form.elements.password.autocomplete = 'new-password';
       form.elements.username.value = 'admin';
     }
-    submit.textContent = setup ? 'Crear acceso privado ↗' : 'Iniciar sesión ↗'; submit.disabled = false;
+    submit.textContent = setup ? 'Crear acceso privado' : 'Iniciar sesión'; submit.disabled = false;
   }).catch(() => { error.textContent = 'No se pudo comprobar el acceso. Actualiza la página para reintentar.'; });
   form.addEventListener('submit', async event => {
     event.preventDefault(); error.textContent = '';
