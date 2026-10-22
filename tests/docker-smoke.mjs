@@ -23,6 +23,10 @@ function docker(args) {
   return result.stdout.trim();
 }
 let port;
+function refreshPort() {
+  const mapping = JSON.parse(docker(['inspect', '--format', '{{json .NetworkSettings.Ports}}', id]));
+  port = Number(mapping['3000/tcp'][0].HostPort);
+}
 function request(url, { method = 'GET', data, headers = {} } = {}) {
   return new Promise((resolve, reject) => {
     const req = http.request({ hostname: '127.0.0.1', port, path: url, method, headers: { Host: 'boda.example', ...(data === undefined ? {} : { Origin: 'https://boda.example', 'Content-Type': 'application/json', 'X-Boda-Request': '1' }), ...headers }, timeout: 5000 }, res => {
@@ -50,8 +54,7 @@ try {
   for (const volume of [dataVolume, uploadVolume]) { docker(['volume', 'create', volume]); createdVolumes.push(volume); }
   docker(['run', '-d', '--name', id, '--read-only', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges:true', '--pids-limit', '100', '--memory', '512m', '--tmpfs', '/tmp:size=16m,mode=1777', '-p', '127.0.0.1::3000', '-e', 'APP_ORIGIN=https://boda.example', '-e', 'ADMIN_AUTH_FILE=/run/secrets/admin_auth', '--mount', `type=bind,source=${accountPath},target=/run/secrets/admin_auth,readonly`, '--mount', `type=volume,source=${dataVolume},target=/var/lib/boda/data`, '--mount', `type=volume,source=${uploadVolume},target=/var/lib/boda/uploads`, image]);
   containerCreated = true;
-  const mapping = JSON.parse(docker(['inspect', '--format', '{{json .NetworkSettings.Ports}}', id]));
-  port = Number(mapping['3000/tcp'][0].HostPort);
+  refreshPort();
   await ready();
   assert.notEqual(docker(['exec', id, 'id', '-u']), '0');
   assert.equal((await request('/')).status, 200);
@@ -66,6 +69,7 @@ try {
   docker(['exec', id, 'node', '--input-type=module', '-e', "import {writeFile} from 'node:fs/promises';await writeFile(process.env.UPLOAD_DIR+'/upload-smoke.png', Buffer.from([137,80,78,71,13,10,26,10]));"]);
   docker(['exec', id, 'node', 'deploy/healthcheck.mjs']);
   docker(['restart', id]);
+  refreshPort(); // Docker may choose a new ephemeral host port after restart.
   await ready();
   assert.equal(JSON.parse((await request('/api/content')).raw).modules[0].groom, 'Docker persistence test');
   assert.equal((await request('/api/rsvps', { headers })).status, 401, 'Restart invalidates sessions.');
