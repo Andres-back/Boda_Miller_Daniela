@@ -16,7 +16,7 @@ async function fixture(t, production = false) {
   const folder = await mkdtemp(path.join(tmpdir(), 'boda-admin-test-'));
   await mkdir(path.join(folder, 'data')); await mkdir(path.join(folder, 'assets'));
   for (const name of ['server.mjs', 'auth.mjs', 'seating.mjs', 'admin.html', 'index.html']) await copyFile(path.join(root, name), path.join(folder, name));
-  for (const name of ['admin-login.html', 'admin-login.js', 'admin-login.css']) await copyFile(path.join(root, 'assets', name), path.join(folder, 'assets', name));
+  for (const name of ['admin-login.html', 'admin-login.js', 'admin-login.css', 'module-copy.js']) await copyFile(path.join(root, 'assets', name), path.join(folder, 'assets', name));
   await copyFile(path.join(root, 'data/content.json'), path.join(folder, 'data/content.json'));
   const secret = password();
   if (production) await writeFile(path.join(folder, 'data/admin-auth.json'), JSON.stringify({ username: 'admin', ...await passwordHash(secret) }));
@@ -83,6 +83,14 @@ test('Administrator access, cookie sessions, CSRF, password rotation and logout'
   const content = await (await f.request('/api/content')).json();
   for (const headers of [{ 'X-CSRF-Token': '' }, { Origin: 'https://evil.example' }, { Origin: '' }]) assert.equal((await f.request('/api/content', { method: 'PUT', auth: true, data: content, headers })).status, 403);
   assert.equal((await f.request('/api/content', { method: 'PUT', auth: true, data: content })).status, 200);
+  const copy = content.modules.find(module => module.id === 'rsvp');
+  assert.equal(copy.uiMessageLabel, 'Unas palabras para los novios');
+  copy.uiMessageLabel = 'Deja tu bendición';
+  content.modules.find(module => module.id === 'hero').uiFooter = 'Nuestro nuevo pie de página';
+  assert.equal((await f.request('/api/content', { method: 'PUT', auth: true, data: content })).status, 200);
+  const reloaded = await (await f.request('/api/content')).json();
+  assert.equal(reloaded.modules.find(module => module.id === 'rsvp').uiMessageLabel, 'Deja tu bendición');
+  assert.equal(reloaded.modules.find(module => module.id === 'hero').uiFooter, 'Nuestro nuevo pie de página');
   const invalid = structuredClone(content); invalid.modules[0].unknown = 'no';
   assert.equal((await f.request('/api/content', { method: 'PUT', auth: true, data: invalid })).status, 400);
   const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+j8ZkAAAAASUVORK5CYII=', 'base64');
@@ -100,7 +108,7 @@ test('Administrator access, cookie sessions, CSRF, password rotation and logout'
 
 test('Seating persists, expands companions, rejects conflicts and protects declined guests', async t => {
   const f = await fixture(t); await f.login();
-  const guest = { name: 'Familia de prueba', attendance: 'yes', guests: 3, companions: ['  Laura Pérez  ', 'Carlos Díaz'], diet: 'Sin nueces', message: '' };
+  const guest = { name: 'Familia de prueba', attendance: 'yes', guests: 3, companions: ['  Laura Pérez  ', 'Carlos Díaz'], message: 'Con mucho cariño.' };
   assert.equal((await f.request('/api/rsvps', { method: 'POST', data: guest })).status, 201);
   assert.equal((await f.request('/api/rsvps', { method: 'POST', data: { ...guest, attendance: 'no', companions: [] } })).status, 201);
   assert.equal((await f.request('/api/rsvps', { method: 'POST', data: { ...guest, guests: 9 } })).status, 400);
@@ -108,6 +116,7 @@ test('Seating persists, expands companions, rejects conflicts and protects decli
   assert.equal(state.guests.length, 3);
   assert.equal(state.guests[1].name, 'Laura Pérez'); assert.equal(state.guests[2].name, 'Carlos Díaz');
   const stored = await (await f.request('/api/rsvps', { auth: true })).json(); assert.deepEqual(stored[0].companions, ['Laura Pérez', 'Carlos Díaz']);
+  assert.equal(stored[0].message, 'Con mucho cariño.'); assert.equal('diet' in stored[0], false);
   for (const companions of [undefined, [], ['Solo uno'], ['Ana', ' '], ['Ana', 7], ['Ana', 'B'.repeat(101)], ['Ana', 'Luis', 'Otro']]) {
     assert.equal((await f.request('/api/rsvps', { method: 'POST', data: { ...guest, companions } })).status, 400);
   }

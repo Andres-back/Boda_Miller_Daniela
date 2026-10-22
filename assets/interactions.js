@@ -83,7 +83,7 @@
       canvas.addEventListener('pointerdown', event => {
         if (revealed || (event.pointerType === 'mouse' && event.button !== 0)) return;
         event.preventDefault(); drawing = true; last = point(event);
-        card.classList.add('is-scratching'); status.textContent = 'Sigue rascando para descubrir cuánto falta…'; mark(last.x, last.y);
+        card.classList.add('is-scratching'); status.textContent = card.dataset.progress; mark(last.x, last.y);
       }, options);
       window.addEventListener('pointermove', event => {
         if (!drawing || revealed) return;
@@ -99,7 +99,7 @@
         revealed = false; drawing = false; last = null; cells.clear(); strokes = [];
         card.classList.remove('is-revealed', 'is-scratching'); clock.setAttribute('aria-hidden', 'true');
         button.hidden = false; resetButton.hidden = true; card.querySelector('.scratch-save').hidden = true;
-        status.textContent = 'Desliza el dedo o el mouse sobre el dorado.';
+        status.textContent = card.dataset.instruction;
         if (!preview) { try { sessionStorage.removeItem(key); } catch {} }
         onRevealChange(false);
         draw();

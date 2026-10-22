@@ -26,6 +26,7 @@
     details: [ ['label', 'Nombre del módulo'], ['eyebrow', 'Texto superior'], ['title', 'Título'], ['dressTitle', 'Vestimenta · título'], ['dressText', 'Vestimenta · indicaciones', 'textarea'], ['giftTitle', 'Regalos · título'], ['giftText', 'Regalos · indicaciones', 'textarea'] ],
     rsvp: [ ['label', 'Nombre del módulo'], ['eyebrow', 'Texto superior'], ['title', 'Título', 'textarea'], ['text', 'Mensaje', 'textarea'], ['deadline', 'Fecha límite de confirmación', 'date'], ['thanks', 'Mensaje después de confirmar', 'textarea'], ['whatsapp', 'WhatsApp de contacto', 'tel', 'Número internacional, solo dígitos. Ejemplo para Colombia: 573215673010.'] ]
   };
+  for (const [id, copy] of Object.entries(window.BodaModuleCopy.modules)) fields[id].push(...copy.map(field => [field.key, field.label, field.value.length > 110 ? 'textarea' : 'text']));
   fields.hero.push(
     ['musicUrl', 'Nuestra canción · enlace de YouTube', 'url', 'Pega el enlace del video. Déjalo vacío para ocultar el botón de música.'],
     ['musicStart', 'Nuestra canción · comenzar en', 'text', 'Minuto y segundo, por ejemplo 1:53. También puedes escribir los segundos: 113. El botón reproduce o pausa la música de fondo, sin abrir el video.']);
@@ -53,6 +54,8 @@
   }
   $('#module-select').addEventListener('change', event => selectModule(event.target.value, true));
   function groupName(key, type) {
+    const copyField = window.BodaModuleCopy.modules[selected]?.find(field => field.key === key);
+    if (copyField) return copyField.group;
     if (key === 'decorationImage') return 'Decoración de la sección';
     if (selected === 'hero') {
       if (key.startsWith('music')) return 'Música de fondo';
@@ -174,7 +177,7 @@
       const response = await window.AdminAccess.fetch('/api/rsvps', { cache: 'no-store' }); if (!response.ok) throw new Error(); guests = await response.json();
       const confirmed = guests.filter(g => g.attendance === 'yes'), total = confirmed.reduce((sum, g) => sum + g.guests, 0);
       $('.guest-summary').innerHTML = [[guests.length, 'Respuestas'], [total, 'Asistentes'], [guests.length - confirmed.length, 'No asistirán']].map(([n, label]) => `<div class="guest-stat"><strong>${n}</strong><span>${label}</span></div>`).join('');
-      $('#guest-list').innerHTML = guests.length ? guests.slice().reverse().map(g => `<article class="guest-card"><h3>${esc(g.name)}</h3><span class="guest-badge ${g.attendance === 'no' ? 'no' : ''}">${g.attendance === 'yes' ? `Asistirá · ${g.guests} ${g.guests === 1 ? 'persona' : 'personas'}` : 'No podrá asistir'}</span>${g.companions?.length ? `<p>Acompañantes: ${g.companions.map(esc).join(', ')}</p>` : ''}${g.diet ? `<p>Alimentación: ${esc(g.diet)}</p>` : ''}${g.message ? `<p>“${esc(g.message)}”</p>` : ''}<small>${new Intl.DateTimeFormat('es-CO', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'America/Bogota' }).format(new Date(g.createdAt))}</small></article>`).join('') : '<div class="empty-state"><span>♡</span>Los primeros “¡allí estaremos!”<br>aparecerán aquí.</div>';
+      $('#guest-list').innerHTML = guests.length ? guests.slice().reverse().map(g => `<article class="guest-card"><h3>${esc(g.name)}</h3><span class="guest-badge ${g.attendance === 'no' ? 'no' : ''}">${g.attendance === 'yes' ? `Asistirá · ${g.guests} ${g.guests === 1 ? 'persona' : 'personas'}` : 'No podrá asistir'}</span>${g.companions?.length ? `<p>Acompañantes: ${g.companions.map(esc).join(', ')}</p>` : ''}${g.message ? `<p>“${esc(g.message)}”</p>` : ''}<small>${new Intl.DateTimeFormat('es-CO', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'America/Bogota' }).format(new Date(g.createdAt))}</small></article>`).join('') : '<div class="empty-state"><span>♡</span>Los primeros “¡allí estaremos!”<br>aparecerán aquí.</div>';
     } catch { $('#guest-list').innerHTML = '<p class="admin-error">No se pudieron cargar las respuestas. Pulsa Actualizar para volver a intentar.</p>'; }
   }
   $('#save-button').addEventListener('click', save);
@@ -192,7 +195,7 @@
     const file = event.target.files[0]; if (!file) return;
     try {
       if (file.size > 200000) throw new Error('El archivo es demasiado grande.');
-      const next = JSON.parse(await file.text());
+      const next = window.BodaModuleCopy.upgrade(JSON.parse(await file.text()));
       if (typeof next.demo !== 'boolean' || !Array.isArray(next.modules) || next.modules.length !== content.modules.length) throw new Error('Este archivo no tiene el formato de la invitación.');
       const ids = new Set();
       for (const m of next.modules) {
@@ -208,7 +211,7 @@
   $('#export-guests').addEventListener('click', () => {
     if (!guests.length) return toast('Todavía no hay respuestas para exportar.');
     const csvCell = value => '"' + String(value ?? '').replace(/^[=+@\-\t\r]/, match => "'" + match).replaceAll('"', '""') + '"';
-    const rows = [['Nombre', 'Asistencia', 'Personas', 'Acompañantes', 'Alimentación', 'Mensaje', 'Recibido'], ...guests.map(g => [g.name, g.attendance === 'yes' ? 'Sí' : 'No', g.guests, (g.companions || []).join(' / '), g.diet, g.message, g.createdAt])];
+    const rows = [['Nombre', 'Asistencia', 'Personas', 'Acompañantes', 'Mensaje', 'Recibido'], ...guests.map(g => [g.name, g.attendance === 'yes' ? 'Sí' : 'No', g.guests, (g.companions || []).join(' / '), g.message, g.createdAt])];
     download('\ufeff' + rows.map(row => row.map(csvCell).join(';')).join('\r\n'), 'text/csv;charset=utf-8', 'respuestas-boda.csv');
   });
   addEventListener('message', event => {

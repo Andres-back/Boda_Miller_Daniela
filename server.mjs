@@ -5,6 +5,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { createAuth } from './auth.mjs';
 import { seatingGuests, validateSeating } from './seating.mjs';
+import './assets/module-copy.js';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const dataDir = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : path.join(root, 'data');
@@ -92,11 +93,11 @@ const server = http.createServer(async (req, res) => {
       await writeFile(path.join(uploadDir, filename), bytes, { flag: 'wx' });
       return reply(res, 201, { url: `/assets/${filename}` });
     }
-    if (url.pathname === '/api/content' && req.method === 'GET') return reply(res, 200, await readJSON('content.json'));
+    if (url.pathname === '/api/content' && req.method === 'GET') return reply(res, 200, globalThis.BodaModuleCopy.upgrade(await readJSON('content.json')));
     if (url.pathname === '/api/content' && req.method === 'PUT') {
-      const content = await body(req);
+      const content = globalThis.BodaModuleCopy.upgrade(await body(req));
       if (!validContent(content)) return reply(res, 400, { error: 'Revisa los módulos y la fecha de la boda.' });
-      const original = await readJSON('content.json');
+      const original = globalThis.BodaModuleCopy.upgrade(await readJSON('content.json'));
       for (const module of content.modules) {
         const schema = original.modules.find(m => m.id === module.id);
         if (Object.keys(module).sort().join() !== Object.keys(schema).sort().join()) return reply(res, 400, { error: 'Los campos del módulo no coinciden.' });
@@ -112,11 +113,11 @@ const server = http.createServer(async (req, res) => {
       if (rsvpRate.size > 10000 && !rate) return reply(res, 429, { error: 'Inténtalo más tarde.' });
       rsvpRate.set(ip, rate?.until > Date.now() ? { ...rate, count: rate.count + 1 } : { count: 1, until: Date.now() + 15 * 60 * 1000 });
       const input = await body(req);
-      if (typeof input.name !== 'string' || !input.name.trim() || input.name.length > 100 || !['yes', 'no'].includes(input.attendance) || !Number.isInteger(input.guests) || input.guests < 1 || input.guests > 8 || typeof input.message !== 'string' || input.message.length > 2000 || typeof input.diet !== 'string' || input.diet.length > 500) return reply(res, 400, { error: 'Revisa tu nombre y los datos de la respuesta.' });
+      if (typeof input.name !== 'string' || !input.name.trim() || input.name.length > 100 || !['yes', 'no'].includes(input.attendance) || !Number.isInteger(input.guests) || input.guests < 1 || input.guests > 8 || typeof input.message !== 'string' || input.message.length > 2000) return reply(res, 400, { error: 'Revisa tu nombre y los datos de la respuesta.' });
       const companions = input.companions ?? [];
       const expected = input.attendance === 'yes' ? input.guests - 1 : 0;
       if (!Array.isArray(companions) || companions.length !== expected || companions.some(name => typeof name !== 'string' || !name.trim() || name.length > 100)) return reply(res, 400, { error: 'Escribe el nombre de cada acompañante para confirmar la asistencia.' });
-      const record = { id: crypto.randomUUID(), name: input.name.trim(), companions: companions.map(name => name.trim()), attendance: input.attendance, diet: input.diet, message: input.message, guests: input.attendance === 'yes' ? input.guests : 0, createdAt: new Date().toISOString() };
+      const record = { id: crypto.randomUUID(), name: input.name.trim(), companions: companions.map(name => name.trim()), attendance: input.attendance, message: input.message, guests: input.attendance === 'yes' ? input.guests : 0, createdAt: new Date().toISOString() };
       await exclusive(async () => {
         const records = await readJSON('rsvps.json');
         if (records.length >= 10000) throw new Error('No fue posible registrar más respuestas.');

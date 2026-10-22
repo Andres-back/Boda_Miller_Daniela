@@ -17,6 +17,8 @@ En **Mesas**, crea una mesa con número único, nombre opcional y entre 1 y 20 s
 
 Cuando un invitado aumenta el total de asistentes, la invitación pide un nombre obligatorio por cada acompañante. El total incluye a la persona principal: 2 asistentes requiere 1 nombre adicional, 3 requiere 2. Los nombres se guardan con la confirmación, aparecen en Confirmaciones y su CSV, y se incorporan a las mesas. Las respuestas antiguas sin estos datos siguen disponibles; se puede nombrar a sus acompañantes desde Mesas.
 
+El formulario ya no solicita restricciones alimentarias: deja visible solo el mensaje opcional para los novios después de los asistentes. Su título, ejemplo, indicación de opcional, preguntas y botones se editan en Invitación → Confirmar asistencia. Los demás módulos incluyen también sus textos de botones, navegación, carta, álbum y pie de página. La actualización añade los nuevos campos de texto de forma compatible al leer contenido existente y respeta las ediciones guardadas; no hay que eliminar los volúmenes.
+
 - Toca una silla libre y elige a una persona para asignarla.
 - Puedes escribir el nombre real de un acompañante.
 - Toca una persona ubicada para moverla a otra silla libre o quitarla de la mesa.

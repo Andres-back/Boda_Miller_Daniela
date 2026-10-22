@@ -38,6 +38,10 @@ La navegación principal separa **Invitación**, **Confirmaciones**, **Mesas** y
 
 Cada módulo permite editar su adorno PNG, subir imágenes, cambiar textos y guardar. Las flechas cambian el orden de los módulos interiores. El interruptor permite ocultarlos. La portada y la confirmación siempre permanecen visibles.
 
+Los módulos también incluyen los textos de navegación, botones, indicaciones del rascado, etiquetas de fotografías, carta y pie de página. En **Invitación → Confirmar asistencia**, los grupos **Formulario · presentación**, **Formulario · asistentes**, **Mensaje para los novios** y **Formulario · botones y avisos** permiten personalizar las preguntas, ejemplos y botones sin tocar código. El formulario conserva únicamente el mensaje opcional para los novios; no solicita restricciones alimentarias. Los nombres de acompañantes continúan siendo obligatorios.
+
+Los nuevos campos editables se incorporan automáticamente al abrir el panel, también cuando los datos vienen de una versión anterior o de un volumen Docker existente. Al guardar se conservan junto con los cambios del módulo. Los respaldos anteriores reciben los valores predeterminados de esos nuevos textos al importarse.
+
 Al final de los campos de cada módulo, el selector **Adorno de esta sección** permite escoger visualmente **Esquina floral**, **Guirnalda dorada** o **Sin adorno**. También permite subir un PNG transparente propio. La elección aparece inmediatamente en la vista previa y se conserva al guardar.
 
 Pulsa **Guardar cambios** o `Ctrl+S` para aplicar los cambios a la invitación. Un aviso **Sin guardar** en la navegación indica que hay ediciones pendientes. El botón de guardado solo se muestra al editar la invitación; las mesas se guardan automáticamente. Los datos guardados se conservan al cerrar el navegador o reiniciar el servidor. En **Cuenta y respaldos** puedes cambiar contraseña, cerrar sesión, descargar el contenido JSON o restaurarlo; las imágenes se guardan por separado en `assets`.

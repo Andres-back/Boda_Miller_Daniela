@@ -99,7 +99,7 @@
     const guest = state.guests.find(person => person.id === form.elements.guestId.value);
     if (!guest) return;
     form.elements.displayName.value = guest.name;
-    $('#seat-group').textContent = 'Confirmación de ' + guest.group + (guest.diet ? ' · Alimentación: ' + guest.diet : '');
+    $('#seat-group').textContent = 'Confirmación de ' + guest.group;
     $('#seat-remove').hidden = !assignmentFor(guest.id);
     destinations(guest, form.dataset.table || '', Number(form.dataset.seat));
   }

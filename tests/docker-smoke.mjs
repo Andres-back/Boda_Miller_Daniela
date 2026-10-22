@@ -65,7 +65,7 @@ try {
   const original = JSON.parse((await request('/api/content')).raw);
   original.modules[0].groom = 'Docker persistence test';
   assert.equal((await request('/api/content', { method: 'PUT', data: original, headers })).status, 200);
-  assert.equal((await request('/api/rsvps', { method: 'POST', data: { name: 'Smoke guest', attendance: 'yes', guests: 2, companions: ['Smoke companion'], diet: '', message: '' } })).status, 201);
+  assert.equal((await request('/api/rsvps', { method: 'POST', data: { name: 'Smoke guest', attendance: 'yes', guests: 2, companions: ['Smoke companion'], message: 'Un mensaje para los novios.' } })).status, 201);
   docker(['exec', id, 'node', '--input-type=module', '-e', "import {writeFile} from 'node:fs/promises';await writeFile(process.env.UPLOAD_DIR+'/upload-smoke.png', Buffer.from([137,80,78,71,13,10,26,10]));"]);
   docker(['exec', id, 'node', 'deploy/healthcheck.mjs']);
   docker(['restart', id]);

@@ -3,7 +3,7 @@ export function seatingGuests(records, names = {}) {
   return records.filter(record => record.attendance === 'yes').flatMap(record => Array.from({ length: record.guests }, (_, i) => {
     const id = record.id + ':' + (i + 1);
     const defaultName = i === 0 ? record.name : record.companions?.[i - 1] || `Acompañante ${i} de ${record.name}`;
-    return { id, rsvpId: record.id, position: i + 1, name: names[id] || defaultName, defaultName, group: record.name, diet: record.diet };
+    return { id, rsvpId: record.id, position: i + 1, name: names[id] || defaultName, defaultName, group: record.name };
   }));
 }
 export function validateSeating(input, current, records) {
