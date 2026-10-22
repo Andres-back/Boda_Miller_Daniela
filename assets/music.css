@@ -1,0 +1,14 @@
+.sound-toggle[hidden] { display: none !important; }
+.sound-toggle { min-height: 44px; border-color: #ac874280; }
+.sound-label { font-size: 13px; color: #35533d; }
+.sound-toggle[aria-pressed="true"] { background: #ece3cd; border-color: #ac8742; }
+.sound-toggle[aria-busy="true"] { opacity: .75; }
+.sound-toggle:focus-visible { outline: 2px solid #80662f; outline-offset: 4px; }
+.music-background { position: fixed; width: 200px; height: 200px; left: -10000px; top: 0; overflow: hidden; pointer-events: none; }
+.music-background iframe { width: 200px; height: 200px; border: 0; }
+@media (max-width: 760px) {
+  .sound-toggle .sound-label { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sound-toggle .sound-bars i { animation: none !important; }
+}

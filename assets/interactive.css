@@ -1,0 +1,71 @@
+.countdown{display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center}
+.countdown-heading{max-width:720px}
+.scratch-experience{position:relative;z-index:2;width:min(100%,720px);margin:8px auto 0;text-align:center}
+.scratch-experience h3{font-size:34px;color:#66502b;margin:0 0 12px}
+.scratch-instruction{font:500 15px/1.6 Manrope,sans-serif;color:#725c35;margin:0 0 20px}
+.scratch-card{max-width:620px;margin:auto;padding:12px;border:1px solid #b79450;border-radius:22px;background:#fff9ea;box-shadow:0 15px 40px #70521f18}
+.scratch-surface{position:relative;border-radius:13px;overflow:hidden;min-height:220px;background:radial-gradient(ellipse at top,#fffefa,#f5e9c9);isolation:isolate}
+.scratch-time{min-height:220px;display:flex;flex-direction:column;justify-content:center;gap:20px;padding:25px 20px;color:#6b4c1f}
+.scratch-kicker,.scratch-signature{font:600 11px Manrope,sans-serif;letter-spacing:2px}
+.scratch-signature{font-size:12px;font-weight:400;letter-spacing:1.5px}
+.scratch-time .countdown-clock{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;gap:10px}
+.scratch-time .time-unit{min-width:0;padding:8px 0;border-right:1px solid #cbb27b77}
+.scratch-time .time-unit:last-child{border-right:0}
+.scratch-time .time-unit>strong{font:500 66px/1 'Cormorant Garamond',serif;font-variant-numeric:tabular-nums;color:#866225;overflow:hidden}
+.countdown-clock .digit-value{display:block;font:inherit;letter-spacing:inherit;color:inherit}
+.scratch-time .time-unit>span{display:block;font:500 11px/1.5 Manrope,sans-serif;letter-spacing:1.2px;margin-top:9px;color:#826c42}
+.scratch-time .countdown-message{grid-column:1/-1}
+.scratch-surface canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;transition:opacity .65s ease;z-index:2}
+.scratch-cover-label{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:10px;align-items:center;pointer-events:none;color:#5c411b;text-shadow:0 1px 1px #fff3c755;z-index:3;transition:opacity .25s}
+.scratch-cover-label i{font-family:serif;font-size:38px;line-height:1;font-style:normal}
+.scratch-cover-label strong{font:500 36px/1.2 'Cormorant Garamond',serif;padding:0 16px}
+.scratch-cover-label span{font:500 11px/1.5 Manrope,sans-serif;letter-spacing:1.2px;padding:0 16px}
+.scratch-card.is-scratching .scratch-cover-label,.scratch-card.is-revealed .scratch-cover-label{opacity:0}
+.scratch-card.is-revealed canvas{opacity:0;pointer-events:none}
+.scratch-status{font:400 14px/1.7 Manrope,sans-serif;color:#75613d;margin:17px 9px 8px;min-height:24px}
+.scratch-actions{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.scratch-reveal,.scratch-save,.scratch-reset{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;min-height:44px;border:1px solid #c4a565;border-radius:30px;background:#fffdf3;font:600 13px Manrope,sans-serif;color:#73531f;margin:0 0 6px;cursor:pointer}
+.scratch-reveal:hover,.scratch-save:hover,.scratch-reset:hover{background:#f5e5bb}
+.scratch-save{background:linear-gradient(120deg,#e0c47e,#f8eab9);color:#563d19}
+.scratch-reset{border-color:transparent;background:transparent}
+.scroll-flourish{display:block;width:76px;height:1px;background:linear-gradient(90deg,transparent,#ae873b,transparent);margin:28px auto 0;transform-origin:center}
+.story-tabs button,.detail-tabs button{transition:background-color .25s,box-shadow .25s,color .25s,transform .25s}
+.gallery-item img{transition:transform .6s ease}
+.gallery-item:hover img{transform:scale(1.035)}
+.button{transition:box-shadow .25s ease,background-color .25s ease,transform .25s ease}
+.button:hover{transform:translateY(-2px);box-shadow:0 8px 24px #97713622}
+.button:active{transform:translateY(0)}
+.button,.story-tabs button,.detail-tab,.story-next,.story-replay,.scratch-reveal,.scratch-save,.scratch-reset,.nav-rsvp{position:relative;overflow:hidden;isolation:isolate}
+.tap-ripple{position:absolute;display:block;border-radius:50%;background:radial-gradient(circle,#fff9ddaa,#dfbd6155 60%,transparent 72%);pointer-events:none;z-index:2;opacity:0}
+.reveal-sparkle{position:absolute;z-index:4;color:#b18b35;font-size:18px;pointer-events:none;opacity:0}
+.button-arrow,.button-emblem,.text-link span,.story-next>span,.nav-rsvp>span{display:inline-block;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.button:hover .button-arrow,.text-link:hover span,.story-next:hover>span,.nav-rsvp:hover>span{transform:translate(3px,-2px)}
+.button:hover .button-emblem{transform:scale(1.12)}
+.story-tabs button:hover,.detail-tab:hover{transform:translateY(-2px)}
+.story-tabs button[aria-selected=true]{animation:tab-settle .38s ease-out}
+.detail-tab[aria-selected=true]:after{animation:underline-in .35s ease-out;transform-origin:left}
+.detail-panel:not([hidden]),.faq[open] p{animation:panel-in .42s ease-out}
+.letter-dialog[open],.gallery-dialog[open]{animation:dialog-in .32s cubic-bezier(.2,.8,.2,1)}
+.field input,.field select,.field textarea{transition:border-color .25s,box-shadow .25s,background-color .25s}
+.field:focus-within{color:#8d6726}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#bb944b;box-shadow:0 0 0 4px #c7a45c1c;background:#fffdf6}
+.hero-discover i{display:inline-block;animation:discover-nudge 2.8s ease-in-out 3}
+@keyframes discover-nudge{0%,70%,100%{transform:translateY(0)}35%{transform:translateY(5px)}}
+@keyframes tab-settle{from{transform:scale(.97)}to{transform:scale(1)}}
+@keyframes underline-in{from{transform:scaleX(.2);opacity:.3}to{transform:scaleX(1);opacity:1}}
+@keyframes panel-in{from{transform:translateY(8px);opacity:.2}to{transform:translateY(0);opacity:1}}
+@keyframes dialog-in{from{transform:translateY(12px) scale(.97);opacity:.2}to{transform:translateY(0) scale(1);opacity:1}}
+@media(max-width:700px){
+ .scratch-experience{margin-top:0;padding:0}.scratch-experience h3{font-size:31px}.scratch-instruction{font-size:14px}.scratch-card{padding:9px;border-radius:18px}
+ .scratch-time{padding:24px 8px;gap:19px}.scratch-kicker{font-size:10px;letter-spacing:1.2px}.scratch-time .countdown-clock{gap:3px}.scratch-time .time-unit>strong{font-size:43px}.scratch-time .time-unit>span{font-size:10px;letter-spacing:0}
+ .site-header nav.is-open{animation:panel-in .28s ease-out}
+ .scratch-status{font-size:13px}.scratch-cover-label strong{font-size:32px}.scratch-cover-label span{font-size:9px;letter-spacing:.8px}
+ .scratch-save,.scratch-reset{font-size:12px;padding:9px 12px}
+ .sound-toggle{width:44px;height:44px;justify-content:center;padding:10px;left:10px;bottom:10px}.sound-toggle .sound-label{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+ .scratch-surface canvas,.scratch-cover-label,.gallery-item img,.button,.button-arrow,.button-emblem,.text-link span,.story-next>span,.nav-rsvp>span,.story-tabs button,.detail-tab,.field input,.field select,.field textarea{transition:none}
+ .button:hover,.button:hover .button-arrow,.button:hover .button-emblem,.text-link:hover span,.story-next:hover>span,.nav-rsvp:hover>span,.story-tabs button:hover,.detail-tab:hover{transform:none}
+ .story-tabs button[aria-selected=true],.detail-tab[aria-selected=true]:after,.detail-panel:not([hidden]),.faq[open] p,.letter-dialog[open],.gallery-dialog[open],.hero-discover i,.site-header nav.is-open{animation:none}
+}
+.preview-mode .story-tabs button,.preview-mode .detail-panel,.preview-mode .hero-discover i{animation:none}

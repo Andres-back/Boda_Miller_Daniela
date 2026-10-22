@@ -1,0 +1,8 @@
+{
+  "name": "miller-daniela-boda",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Invitación de boda interactiva con administrador visual por módulos",
+  "scripts": { "start": "node server.mjs", "dev": "node server.mjs", "check": "node --check server.mjs && node --check auth.mjs && node --check seating.mjs && node --check app.js && node --check admin.js && node --check assets/interactions.js && node --check assets/music.js && node --check assets/admin-session.js && node --check assets/admin-login.js && node --check assets/admin-tables.js && node --check assets/rsvp-companions.js && node --check deploy/start.mjs && node --check deploy/healthcheck.mjs", "test": "node --test tests/*.test.mjs" },
+  "engines": { "node": ">=22" }
+}

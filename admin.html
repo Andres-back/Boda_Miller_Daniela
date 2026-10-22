@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f8f5e9">
+  <meta name="robots" content="noindex,nofollow"><title>Administración · Miller & Daniela</title>
+  <link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/admin.css"><link rel="stylesheet" href="/assets/admin-tables.css"><link rel="stylesheet" href="/assets/admin-shell.css">
+  <script src="/assets/admin-session.js" defer></script><script src="/assets/admin-tables.js" defer></script><script src="/admin.js" defer></script>
+</head>
+<body class="admin-redesign">
+  <a class="admin-skip-link" href="#admin-content">Ir al contenido</a>
+  <header class="admin-header">
+    <a class="admin-brand" href="/admin" aria-label="Administración de Miller y Daniela">M<span>&</span>D <i>ADMINISTRACIÓN</i></a>
+    <div class="admin-breadcrumb"><span>Tu boda</span><i aria-hidden="true">/</i><strong id="admin-current-view">Invitación</strong></div>
+    <div class="header-actions"><div class="header-center"><span class="status-dot"></span><span id="save-status" role="status" aria-live="polite">Cargando invitación…</span></div><a class="view-invitation" href="/" target="_blank" rel="noopener">Ver invitación <span aria-hidden="true">↗</span></a><button id="save-button" class="primary" disabled>Guardar cambios <span aria-hidden="true">↗</span></button></div>
+  </header>
+  <div class="admin-layout" data-view="modules" data-workspace="edit">
+    <aside class="sidebar">
+      <div class="sidebar-heading"><p>MILLER & DANIELA</p><h1>El gran día,<br>en tus manos.</h1></div>
+      <nav class="sidebar-tabs" aria-label="Administración">
+        <button type="button" id="modules-tab" class="admin-nav-item active" aria-controls="module-editor" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span><strong>Invitación</strong><small>Textos, fotos y música</small><em id="pending-edit-indicator" hidden>Sin guardar</em></span><i aria-hidden="true">›</i></button>
+        <button type="button" id="guests-tab" class="admin-nav-item" aria-controls="guests-editor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m20 0v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span><strong>Confirmaciones</strong><small>Respuestas de tus invitados</small></span><i aria-hidden="true">›</i></button>
+        <button type="button" id="tables-tab" class="admin-nav-item" aria-controls="tables-editor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M8 3h8M8 21h8M3 8v8m18-8v8"/></svg><span><strong>Mesas</strong><small>Personas, lugares y capacidad</small></span><i aria-hidden="true">›</i></button>
+        <button type="button" id="account-tab" class="admin-nav-item" aria-controls="account-editor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg><span><strong>Cuenta y respaldos</strong><small>Acceso y copias del contenido</small></span><i aria-hidden="true">›</i></button>
+      </nav>
+      <div class="sidebar-bottom"><div class="admin-couple">Miller <em>&</em> Daniela</div><div class="session-summary"><span class="session-dot" aria-hidden="true"></span><span>Sesión privada · <strong id="admin-username"></strong></span></div></div>
+    </aside>
+    <div class="admin-workspace">
+      <div id="module-workspace-toolbar" class="workspace-toolbar"><div><strong>Personaliza la invitación</strong><span>Elige una sección, edita y guarda tus cambios.</span></div><div class="workspace-modes" aria-label="Área de trabajo"><button type="button" data-workspace-mode="edit" aria-pressed="true">Editar contenido</button><button type="button" data-workspace-mode="preview" aria-pressed="false">Vista previa</button></div></div>
+      <div class="workspace-content">
+        <main class="editor" id="admin-content" tabindex="-1">
+          <div id="module-list" class="module-picker"><label for="module-select">SECCIÓN DE LA INVITACIÓN</label><select id="module-select" aria-label="Seleccionar sección para editar"><option>Cargando secciones…</option></select><p>También puedes deslizar la vista previa para elegir una sección.</p></div>
+          <section id="module-editor"><div class="editor-heading"><div><span class="eyebrow" id="module-number">MÓDULO 01</span><h2 id="module-title">Portada</h2></div><span class="module-badge">Vista editable</span></div><p class="editor-help" id="module-description">La primera impresión de su historia.</p><div class="module-tools"><label class="toggle-label"><input type="checkbox" id="module-enabled"><span class="toggle-track"></span>Visible en la invitación</label><div><button id="move-up" title="Mover módulo hacia arriba" aria-label="Mover módulo hacia arriba">↑</button><button id="move-down" title="Mover módulo hacia abajo" aria-label="Mover módulo hacia abajo">↓</button></div></div><form id="fields-form"></form><div class="demo-setting"><label class="toggle-label"><input type="checkbox" id="demo-enabled"><span class="toggle-track"></span>Mostrar aviso de datos ficticios</label><p>Desactívalo cuando la fecha y el lugar sean definitivos.</p></div></section><section id="guests-editor" hidden><span class="eyebrow">PERSONAS QUE QUEREMOS</span><h2>Las respuestas</h2><p class="editor-help">Las confirmaciones recibidas en esta invitación.</p><div class="guest-summary"></div><div class="guest-actions"><button id="refresh-guests" class="secondary">↻ Actualizar</button><button id="export-guests" class="secondary">↓ Descargar CSV</button></div><div id="guest-list"></div></section>
+<section id="tables-editor" hidden>
+  <span class="eyebrow">UN LUGAR PARA CADA PERSONA</span><h2>Las mesas</h2>
+  <p class="editor-help">Organiza a quienes confirmaron su asistencia. Toca una silla para asignar una persona; puedes nombrar a sus acompañantes y cambiar su lugar.</p>
+  <div id="seating-summary" class="seating-summary" aria-live="polite"></div>
+  <div class="seating-toolbar"><label>Buscar persona o mesa<input id="seating-search" type="search" placeholder="Nombre, familia o mesa…"></label><button id="refresh-seating" class="secondary" type="button">Actualizar</button><button id="export-seating" class="secondary" type="button">Descargar CSV</button><button id="print-seating" class="secondary" type="button">Imprimir</button></div>
+  <p id="seating-status" role="status" aria-live="polite"></p>
+  <div class="seating-layout"><div id="table-cards"></div><aside class="seating-sidebar">
+    <form id="create-table" class="table-create"><h3>Crear una mesa</h3><label>Número<input name="number" type="number" min="1" max="999" value="1" required></label><label>Nombre opcional<input name="name" maxlength="80" placeholder="Familia, amigos…"></label><label>Capacidad<input name="capacity" type="number" min="1" max="20" value="8" required></label><button class="primary" type="submit">Crear mesa +</button></form>
+    <div class="unassigned-panel"><h3>Pendientes de ubicar <span id="unassigned-count">0</span></h3><div id="unassigned-list"></div></div>
+  </aside></div>
+</section>
+          <section id="account-editor" hidden>
+  <div class="page-heading"><span class="eyebrow">CONFIGURACIÓN PRIVADA</span><h2>Cuenta y respaldos</h2><p class="editor-help">Administra tu acceso y conserva una copia de los textos y ajustes de la invitación.</p></div>
+  <div class="account-grid">
+    <article class="settings-card"><span class="settings-icon" aria-hidden="true">01</span><h3>Tu acceso</h3><p>Sesión iniciada como <strong id="account-username">…</strong>.</p><p>Actualiza tu contraseña cuando lo necesites. Las otras sesiones se cerrarán al cambiarla.</p><div class="settings-actions"><button type="button" id="password-button" class="secondary">Cambiar contraseña</button><button type="button" id="logout-button" class="account-action">Cerrar sesión <span aria-hidden="true">↗</span></button></div></article>
+    <article class="settings-card"><span class="settings-icon" aria-hidden="true">02</span><h3>Respaldar la invitación</h3><p>Descarga los textos y ajustes para conservarlos o restaurarlos después. Las imágenes y los invitados se respaldan por separado.</p><button type="button" id="export-content" class="secondary">Descargar contenido JSON ↓</button></article>
+    <article class="settings-card"><span class="settings-icon" aria-hidden="true">03</span><h3>Restaurar contenido</h3><p>Selecciona un respaldo de esta invitación. Podrás revisar el resultado y guardar los cambios desde Invitación.</p><label class="backup-upload">Archivo de respaldo<input id="import-content" type="file" accept="application/json,.json"><span>Archivo JSON de esta invitación.</span></label></article>
+  </div>
+</section>
+        </main>
+        <section class="preview-area" aria-label="Vista previa de la invitación"><div class="preview-toolbar"><div><span class="preview-live-dot"></span>VISTA PREVIA EN VIVO</div><div class="device-controls"><button data-device="desktop" class="active" aria-label="Vista de escritorio" aria-pressed="true">▰</button><button data-device="mobile" aria-label="Vista de celular" aria-pressed="false">▯</button></div><button id="refresh-preview" aria-label="Actualizar vista previa">↻</button></div><div class="preview-frame-wrap"><iframe id="preview" src="/?preview=1" title="Vista previa de Miller y Daniela"></iframe></div><div class="preview-footer"><span id="preview-section">01 / Portada</span><span>Desliza para recorrer los módulos ↓</span></div></section>
+
+      </div>
+    </div>
+  </div>
+  <dialog id="seat-dialog" class="admin-dialog" aria-labelledby="seat-dialog-title"><form id="seat-form"><span class="eyebrow">DISTRIBUCIÓN DE INVITADOS</span><h2 id="seat-dialog-title">Asignar lugar</h2><label>Persona<select name="guestId" required></select></label><label>Nombre de la persona<input name="displayName" maxlength="100" required></label><label>Mesa y silla<select name="destination"></select></label><p class="dialog-help" id="seat-group"></p><p id="seat-error" role="alert"></p><div class="dialog-actions"><button type="button" id="seat-cancel" class="secondary">Cancelar</button><button type="button" id="seat-remove" class="secondary">Quitar de la mesa</button><button type="submit" class="primary">Guardar lugar</button></div></form></dialog>
+  <dialog id="password-dialog" class="admin-dialog" aria-labelledby="password-title"><form id="password-form"><h2 id="password-title">Cambiar contraseña</h2><label>Contraseña actual<input name="currentPassword" type="password" autocomplete="current-password" required maxlength="128"></label><label>Nueva contraseña<input name="password" type="password" autocomplete="new-password" required minlength="12" maxlength="128"></label><label>Repite la nueva contraseña<input name="confirm" type="password" autocomplete="new-password" required minlength="12" maxlength="128"></label><p id="password-error" role="alert"></p><div class="dialog-actions"><button type="button" id="password-cancel" class="secondary">Cancelar</button><button type="submit" class="primary">Actualizar contraseña</button></div></form></dialog>
+  <div id="admin-toast" class="admin-toast" role="status" aria-live="polite"></div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+name: boda-miller-daniela
+services:
+  boda:
+    build:
+      context: .
+      target: runtime
+    image: boda-miller-daniela:local
+    restart: unless-stopped
+    init: true
+    environment:
+      NODE_ENV: production
+      APP_ORIGIN: ${APP_ORIGIN:?Configura APP_ORIGIN con el dominio HTTPS en .env}
+      HOST: 0.0.0.0
+      PORT: "3000"
+      DATA_DIR: /var/lib/boda/data
+      UPLOAD_DIR: /var/lib/boda/uploads
+      ADMIN_AUTH_FILE: /run/secrets/admin_auth
+    ports:
+      - "127.0.0.1:${APP_PORT:-3000}:3000"
+    volumes:
+      - boda_data:/var/lib/boda/data
+      - boda_uploads:/var/lib/boda/uploads
+    secrets:
+      - admin_auth
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 100
+    mem_limit: 512m
+    stop_grace_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+volumes:
+  boda_data:
+  boda_uploads:
+secrets:
+  admin_auth:
+    file: ./secrets/admin-auth.json

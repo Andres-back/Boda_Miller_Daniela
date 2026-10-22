@@ -1,0 +1,13 @@
+/* Decorative PNGs stay inside the page at every animation frame. */
+html,body{overflow-x:clip}
+[hidden]{display:none!important}
+.decor-right{transform-origin:center center}
+.hero-bottom{z-index:3}
+.hero-bottom>p:first-child{padding-left:100px}
+.hero-full-names i{font-style:normal}
+.hero-bottom .right-note{margin-left:auto}
+.venue-photo{position:relative;margin:0;min-height:400px}
+.venue-photo img{position:absolute;inset:0;width:100%;height:100%;min-height:0;max-height:none}
+.venue-photo figcaption{position:absolute;bottom:15px;left:15px;right:15px;text-align:center;font-size:8px;letter-spacing:.6px;color:white;text-shadow:0 1px 4px #0009}
+@media(max-width:700px){.venue-photo{min-height:290px}}
+@media(max-width:700px){.hero-bottom>p:first-child{display:none}.hero-full-names{font-size:8px;max-width:280px;line-height:1.7}.hero-full-names span{display:block}.hero-full-names i{display:none}}
