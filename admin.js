@@ -64,7 +64,7 @@
       if (['eyebrow', 'subtitle', 'button', 'welcomeTitle', 'welcomeMessage', 'welcomeClosing'].includes(key)) return 'Mensajes de bienvenida';
       return 'Los novios, la fecha y el lugar';
     }
-    if (selected === 'celebration') return /^(arrival|ceremony|memories|dinner)/.test(key) ? 'Itinerario y horarios' : 'Lugar y ubicación';
+    if (selected === 'celebration') return /^(arrival|ceremony|memories|dinner)/.test(key) ? 'Horarios del día' : 'Lugar y ubicación';
     if (selected === 'illustrations') {
       for (const [prefix, name] of [['car', 'Escena 1 · La llegada'], ['rings', 'Escena 2 · El sí'], ['dance', 'Escena 3 · La alegría']]) if (key.startsWith(prefix)) return name;
     }
@@ -101,19 +101,21 @@
       const group = groupName(key, type);
       if (!grouped.has(group)) grouped.set(group, []);
       if (key === 'decorationImage') { grouped.get(group).push(decorationPicker(m)); return; }
-      const required = ['date', 'deadline', 'groom', 'bride', 'label'].includes(key) ? 'required' : '';
-      const input = type === 'textarea' ? `<textarea data-key="${key}" rows="${key === 'letter' ? 9 : 3}" maxlength="12000">${esc(value)}</textarea>` : `<input data-key="${key}" type="${type === 'image' ? 'text' : type}" value="${esc(value)}" ${required} maxlength="${type === 'image' ? 3000 : 12000}" ${type === 'url' ? 'placeholder="https://…"' : ''}>`;
+      const required = ['date', 'deadline', 'groom', 'bride', 'label'].includes(key) || (type === 'time' && key !== 'dinnerEndTime') ? 'required' : '';
+      if (type === 'time' && !hint) hint = key === 'ceremonyTime' ? '5:00 p. m. equivale a 17:00. Al cambiar esta hora también se actualizan la portada, la cuenta regresiva y el calendario.' : 'Selecciona la hora y los minutos. Si aparece AM/PM, elige p. m. para la tarde.';
+      const input = type === 'textarea' ? `<textarea data-key="${key}" rows="${key === 'letter' ? 9 : 3}" maxlength="12000">${esc(value)}</textarea>` : `<input data-key="${key}" type="${type === 'image' ? 'text' : type}" value="${esc(value)}" ${required} ${type === 'time' ? 'step="60"' : ''} maxlength="${type === 'image' ? 3000 : 12000}" ${type === 'url' ? 'placeholder="https://…"' : ''}>`;
       grouped.get(group).push(`<label class="edit-field">${esc(label)}${input}${hint ? `<span class="field-hint">${esc(hint)}</span>` : ''}</label>${type === 'image' ? `<img class="field-image-preview" src="${esc(safeImage(value))}" alt="Vista previa de ${esc(label)}" ${value ? '' : 'hidden'}><label class="edit-field">O sube una imagen desde tu equipo<input type="file" accept="image/png,image/jpeg,image/webp" data-upload="${key}"><span class="field-hint">PNG, JPG o WebP · hasta 8 MB.</span></label>` : ''}`);
     });
-    $('#fields-form').innerHTML = [...grouped].map(([name, html], groupIndex) => {
+    const groups = [...grouped];
+    if (selected === 'celebration') groups.sort(([a], [b]) => Number(b === 'Horarios del día') - Number(a === 'Horarios del día'));
+    $('#fields-form').innerHTML = groups.map(([name, html], groupIndex) => {
       const stateKey = selected + ':' + name, open = fieldGroupState.has(stateKey) ? fieldGroupState.get(stateKey) : groupIndex === 0;
       return `<details class="field-group" data-state-key="${esc(stateKey)}" ${open ? 'open' : ''}><summary><span>${esc(name)}</span><i aria-hidden="true">+</i></summary><div class="field-group-body">${html.join('')}</div></details>`;
     }).join('');
     $$('#fields-form .field-group').forEach(group => group.addEventListener('toggle', () => fieldGroupState.set(group.dataset.stateKey, group.open)));
     $$('#fields-form [data-key]').forEach(input => input.addEventListener('input', () => {
-      m[input.dataset.key] = input.value; markDirty(); schedulePreview();
-      if (input.dataset.key === 'date' && input.value) content.modules.find(m => m.id === 'celebration').ceremonyTime = input.value.slice(11, 16);
-      if (input.dataset.key === 'ceremonyTime' && input.value) { const cover = content.modules.find(m => m.id === 'hero'); cover.date = cover.date.slice(0, 11) + input.value; }
+      if (!applyFieldEdit(m, input.dataset.key, input.value)) return;
+      markDirty(); schedulePreview();
       if (input.dataset.key === 'label') { $('#module-title').textContent = input.value; listModules(); }
       if (['groom', 'bride'].includes(input.dataset.key)) updateCouple();
       if (input.dataset.key.endsWith('Image') || input.dataset.key === 'image' || input.dataset.key.startsWith('image')) { const preview = input.closest('label').nextElementSibling; if (preview?.tagName === 'IMG') { preview.src = safeImage(input.value); preview.hidden = !input.value; } }
@@ -131,6 +133,26 @@
       $('#fields-form').append(button);
     }
     updatePreviewFooter();
+  }
+  function applyFieldEdit(owner, key, value) {
+    const field = fields[owner.id]?.find(field => field[0] === key);
+    // Native time controls briefly report an empty value while a part is being typed.
+    if (field?.[2] === 'time' && !(key === 'dinnerEndTime' && value === '') && !/^([01]\d|2[0-3]):[0-5]\d$/.test(value)) return false;
+    owner[key] = value;
+    if (owner.id === 'hero' && key === 'date' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value)) content.modules.find(m => m.id === 'celebration').ceremonyTime = value.slice(11, 16);
+    if (owner.id === 'celebration' && key === 'ceremonyTime') { const cover = content.modules.find(m => m.id === 'hero'); cover.date = cover.date.slice(0, 11) + value; }
+    return true;
+  }
+  function editPreviewField(id, key) {
+    if (!fields[id]?.some(field => field[0] === key) || !content.modules.some(m => m.id === id)) return;
+    selectModule(id, false);
+    window.AdminSections.workspace('edit');
+    const input = $$('#fields-form [data-key]').find(input => input.dataset.key === key);
+    if (!input) return;
+    const group = input.closest('.field-group');
+    if (group) { group.open = true; fieldGroupState.set(group.dataset.stateKey, true); }
+    input.scrollIntoView({ block: 'center', behavior: 'instant' });
+    input.focus({ preventScroll: true });
   }
   function updateCouple() { const hero = content.modules.find(m => m.id === 'hero'); $('.admin-couple').innerHTML = `${esc(hero.groom)} <em>&</em> ${esc(hero.bride)}`; }
   function updatePreviewFooter() { const index = content.modules.findIndex(m => m.id === selected); $('#preview-section').textContent = `${String(index + 1).padStart(2, '0')} / ${module().label}${module().enabled ? '' : ' · oculto'}`; }
@@ -217,9 +239,10 @@
   addEventListener('message', event => {
     if (event.origin !== location.origin || event.source !== $('#preview').contentWindow || !content) return;
     if (event.data.type === 'boda:ready') { previewReady = true; updatePreview(true); }
+    if (event.data.type === 'boda:edit-field') editPreviewField(event.data.id, event.data.key);
     if (event.data.type === 'boda:section' && !suppressPreviewSync) {
       const id = event.data.id;
-      if (id !== selected && !$('#module-editor').hidden && !$('#fields-form').contains(document.activeElement)) selectModule(id, false);
+      if (id !== selected && !$('#module-editor').hidden && (event.data.interactive || !$('#fields-form').contains(document.activeElement))) selectModule(id, false);
     }
   });
   addEventListener('beforeunload', event => { if (dirty) { event.preventDefault(); event.returnValue = ''; } });

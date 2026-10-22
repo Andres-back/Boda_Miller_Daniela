@@ -404,8 +404,27 @@
   function observeModules() {
     if (!preview) return;
     sectionObserver?.disconnect();
-    sectionObserver = new IntersectionObserver(entries => { const entry = entries.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]; if (entry) parent.postMessage({ type: 'boda:section', id: entry.target.dataset.module }, location.origin); }, { rootMargin: '-90px 0px -45% 0px', threshold: [0, .1, .3, .5] });
+    sectionObserver = new IntersectionObserver(() => reportPreviewModule(), { rootMargin: `-${Math.round(innerHeight * .25)}px 0px -${Math.round(innerHeight * .74)}px 0px`, threshold: 0 });
     $$('[data-module]').forEach(s => sectionObserver.observe(s));
+    $$('.timeline-item .event-time').forEach((time, index) => {
+      const key = ['arrivalTime', 'ceremonyTime', 'memoriesTime', 'dinnerTime'][index];
+      time.setAttribute('role', 'button'); time.tabIndex = 0;
+      time.classList.add('preview-edit-time');
+      time.title = 'Pulsa para editar este horario';
+      time.setAttribute('aria-label', `Editar horario: ${time.textContent}`);
+      const edit = () => parent.postMessage({ type: 'boda:edit-field', id: 'celebration', key }, location.origin);
+      time.addEventListener('click', edit);
+      time.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); edit(); } });
+    });
+  }
+  function visibleModule() {
+    const point = innerHeight * .25, sections = $$('[data-module]').map(element => ({ element, rect: element.getBoundingClientRect() }));
+    return (sections.find(section => section.rect.top <= point && section.rect.bottom > point) || sections.filter(section => section.rect.top <= point).at(-1) || sections[0])?.element;
+  }
+  function reportPreviewModule(interactive = false) {
+    if (!preview) return;
+    const current = visibleModule();
+    if (current) parent.postMessage({ type: 'boda:section', id: current.dataset.module, interactive }, location.origin);
   }
   function setActiveNavigation(moduleId) {
     const id = ['countdown', 'welcome'].includes(moduleId) ? 'hero' : moduleId;
@@ -416,15 +435,21 @@
   function observeNavigation() {
     navigationObserver?.disconnect();
     navigationObserver = new IntersectionObserver(() => {
-      const point = innerHeight * .25, sections = $$('[data-module]').map(element => ({ element, rect: element.getBoundingClientRect() }));
-      const current = sections.find(section => section.rect.top <= point && section.rect.bottom > point) || sections.filter(section => section.rect.top <= point).at(-1) || sections[0];
+      const current = visibleModule();
       if (!current) return;
-      setActiveNavigation(current.element.id);
+      setActiveNavigation(current.id);
     }, { rootMargin: `-${Math.round(innerHeight * .18)}px 0px -${Math.round(innerHeight * .7)}px 0px`, threshold: 0 });
     $$('[data-module]').forEach(section => navigationObserver.observe(section));
   }
   function scrollModule(id) { $$('.preview-selected').forEach(el => el.classList.remove('preview-selected')); const el = document.getElementById(id); if (el) { el.classList.add('preview-selected'); el.scrollIntoView({ behavior: 'instant', block: 'start' }); } }
-  if (preview) document.body.classList.add('preview-mode');
+  if (preview) {
+    document.body.classList.add('preview-mode');
+    let previewSyncPending = false;
+    const syncFromInteraction = () => { if (previewSyncPending) return; previewSyncPending = true; requestAnimationFrame(() => { previewSyncPending = false; reportPreviewModule(true); }); };
+    addEventListener('wheel', syncFromInteraction, { passive: true });
+    addEventListener('touchmove', syncFromInteraction, { passive: true });
+    addEventListener('keydown', event => { if (['PageDown', 'PageUp', 'Home', 'End', 'ArrowDown', 'ArrowUp', ' '].includes(event.key) && !event.target.closest('input, textarea, select, button, [role="button"], [role="tab"]')) syncFromInteraction(); });
+  }
   $('.envelope-seal').addEventListener('click', openEnvelope);
   $('.invitation-skip').addEventListener('click', finishInvitation);
   $('.reopen-invitation').addEventListener('click', showInvitation);

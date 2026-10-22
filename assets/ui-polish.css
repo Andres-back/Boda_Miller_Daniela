@@ -1,3 +1,7 @@
+/* The itinerary becomes directly editable only inside the admin preview. */
+.preview-mode .preview-edit-time{cursor:pointer;min-height:40px;padding:10px 14px;transition:background .2s,box-shadow .2s}
+.preview-mode .preview-edit-time:hover{background:#e1e8d1;box-shadow:0 0 0 2px #a7b59a66}
+.preview-mode .preview-edit-time:focus-visible{outline:2px solid #80662f;outline-offset:4px}
 /* Consistent controls, navigation and invitation details. */
 .hero-date-teaser{display:flex;align-items:center;gap:14px;color:#765722;text-decoration:none;min-height:65px;border-radius:8px}
 .hero-date-teaser>.ui-icon{width:30px;height:30px;color:#a47e35}

@@ -106,6 +106,22 @@ test('Administrator access, cookie sessions, CSRF, password rotation and logout'
   assert.equal((await f.request('/api/rsvps', { auth: true })).status, 401);
 });
 
+test('Administrator can save the ceremony at 5 p.m. and reload it without changing arrival', async t => {
+  const f = await fixture(t); await f.login();
+  const content = await (await f.request('/api/content')).json();
+  const celebration = content.modules.find(module => module.id === 'celebration');
+  const cover = content.modules.find(module => module.id === 'hero');
+  for (const time of ['16:00', '17:00']) {
+    celebration.ceremonyTime = time;
+    cover.date = cover.date.slice(0, 11) + time;
+    assert.equal((await f.request('/api/content', { method: 'PUT', auth: true, data: content })).status, 200);
+  }
+  const saved = await (await f.request('/api/content')).json();
+  assert.equal(saved.modules.find(module => module.id === 'celebration').ceremonyTime, '17:00');
+  assert.equal(saved.modules.find(module => module.id === 'celebration').arrivalTime, '16:00');
+  assert.equal(saved.modules.find(module => module.id === 'hero').date, '2026-11-14T17:00');
+});
+
 test('Seating persists, expands companions, rejects conflicts and protects declined guests', async t => {
   const f = await fixture(t); await f.login();
   const guest = { name: 'Familia de prueba', attendance: 'yes', guests: 3, companions: ['  Laura Pérez  ', 'Carlos Díaz'], message: 'Con mucho cariño.' };
