@@ -29,7 +29,7 @@
   for (const [id, copy] of Object.entries(window.BodaModuleCopy.modules)) fields[id].push(...copy.map(field => [field.key, field.label, field.value.length > 110 ? 'textarea' : 'text']));
   fields.hero.push(
     ['musicUrl', 'Nuestra canción · enlace de YouTube', 'url', 'Pega el enlace del video. Déjalo vacío para ocultar el botón de música.'],
-    ['musicStart', 'Nuestra canción · comenzar en', 'text', 'Minuto y segundo, por ejemplo 1:53. También puedes escribir los segundos: 113. El botón reproduce o pausa la música de fondo, sin abrir el video.']);
+    ['musicStart', 'Nuestra canción · comenzar en', 'text', 'Minuto y segundo, por ejemplo 1:53. Intenta sonar al abrir el enlace; si el navegador lo bloquea, comienza con el primer toque. El botón permite pausar o reanudar.']);
   fields.hero.splice(fields.hero.findIndex(field => field[0] === 'button'), 0,
     ['accentImage', 'Fotografía del enlace al álbum', 'image'],
     ['photoCaption', 'Frase sobre la fotografía']);

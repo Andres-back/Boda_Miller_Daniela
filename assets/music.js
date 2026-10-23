@@ -5,6 +5,7 @@
   const slot = document.querySelector('#wedding-music');
   let config = null, player = null, ready = false, wanted = false;
   let generation = 0, failed = false, apiPromise, playbackTimer, toastTimer;
+  let retryOnInteraction = false, userPaused = false, requestedByUser = false;
 
   function videoId(value) {
     try {
@@ -29,8 +30,8 @@
   function showState(playing = false, loading = false) {
     button.setAttribute('aria-pressed', String(playing));
     button.setAttribute('aria-busy', String(loading));
-    button.setAttribute('aria-label', loading ? 'Cancelar el inicio de la música' : playing ? 'Pausar nuestra canción' : 'Reproducir nuestra canción');
-    label.textContent = loading ? 'Iniciando música…' : playing ? 'Pausar música' : 'Nuestra canción';
+    button.setAttribute('aria-label', loading ? 'Cancelar el inicio de la música' : playing ? 'Pausar nuestra canción' : retryOnInteraction ? 'Activar nuestra canción' : 'Reproducir nuestra canción');
+    label.textContent = loading ? 'Iniciando música…' : playing ? 'Pausar música' : retryOnInteraction ? 'Toca para escuchar' : 'Nuestra canción';
   }
 
   function notify(message) {
@@ -66,6 +67,7 @@
     generation++;
     clearTimeout(playbackTimer);
     wanted = ready = failed = false;
+    retryOnInteraction = userPaused = requestedByUser = false;
     player?.destroy();
     player = null;
     slot.replaceChildren();
@@ -73,19 +75,28 @@
   }
 
   function playbackFailed(message) {
-    const wasRequested = wanted;
+    const notifyUser = wanted && requestedByUser;
     clearTimeout(playbackTimer);
     wanted = false;
     failed = true;
+    retryOnInteraction = false;
     player?.pauseVideo();
     showState();
-    if (wasRequested) notify(message);
+    if (notifyUser) notify(message);
+  }
+
+  function awaitInteraction() {
+    clearTimeout(playbackTimer);
+    wanted = false;
+    retryOnInteraction = !userPaused;
+    showState();
+    if (requestedByUser && !userPaused) notify('Toca el botón de música para permitir el sonido.');
   }
 
   function watchPlayback() {
     clearTimeout(playbackTimer);
     playbackTimer = setTimeout(() => {
-      if (wanted) playbackFailed('La música no pudo iniciar. Toca el botón para volver a intentarlo.');
+      if (wanted) awaitInteraction();
     }, 15000);
   }
 
@@ -94,7 +105,7 @@
     const token = generation;
     const track = { ...config };
     failed = false;
-    // Prepare without autoplay so the click can call playVideo directly once ready.
+    // Request playback through the API when ready, so cancellation remains reliable.
     const frame = document.createElement('iframe');
     const url = new URL('https://www.youtube.com/embed/' + track.id);
     url.search = new URLSearchParams({ start: track.start, autoplay: '0', enablejsapi: '1', origin: location.origin, playsinline: '1', controls: '0', rel: '0' });
@@ -119,7 +130,7 @@
             if (token !== generation) return;
             if (event.data === 1) {
               clearTimeout(playbackTimer);
-              if (wanted) { failed = false; showState(true); }
+              if (wanted) { failed = retryOnInteraction = false; showState(true); }
               else event.target.pauseVideo();
             } else if (event.data === 2) {
               clearTimeout(playbackTimer);
@@ -132,10 +143,7 @@
           },
           onAutoplayBlocked() {
             if (token !== generation) return;
-            clearTimeout(playbackTimer);
-            wanted = false;
-            showState();
-            notify('Toca de nuevo el botón de música para permitir el sonido.');
+            awaitInteraction();
           },
           onError() {
             if (token === generation) playbackFailed('No se pudo reproducir la canción. Toca el botón para reintentar.');
@@ -147,20 +155,42 @@
     });
   }
 
+  function requestPlayback(user = false) {
+    if (!config) return;
+    if (failed) { destroy(); prepare(); }
+    requestedByUser = user;
+    userPaused = false;
+    wanted = true;
+    showState(false, true);
+    watchPlayback();
+    if (ready) player.playVideo();
+  }
+
+  function startFromInteraction(event) {
+    if (!config || !retryOnInteraction || userPaused || event.isTrusted === false || event.target?.closest('.sound-toggle')) return;
+    retryOnInteraction = false;
+    requestPlayback(true);
+  }
+
+  // The envelope's first tap also unlocks playback when audible autoplay is blocked.
+  document.addEventListener('click', startFromInteraction, true);
+  document.addEventListener('keydown', event => {
+    if (!event.repeat && ['Enter', ' '].includes(event.key)) startFromInteraction(event);
+  }, true);
+
   button.addEventListener('click', () => {
     if (!config) return;
     if (wanted) {
       wanted = false;
+      userPaused = true;
+      retryOnInteraction = false;
       clearTimeout(playbackTimer);
       if (ready) player.pauseVideo();
       showState();
       return;
     }
-    if (failed) { destroy(); prepare(); }
-    wanted = true;
-    showState(false, true);
-    watchPlayback();
-    if (ready) player.playVideo();
+    retryOnInteraction = false;
+    requestPlayback(true);
   });
 
   window.BodaMusic = {
@@ -171,7 +201,11 @@
       if (changed) destroy();
       config = next;
       button.hidden = !config;
-      if (changed && config) prepare();
+      if (changed && config) {
+        prepare();
+        requestPlayback();
+        retryOnInteraction = true;
+      }
     }
   };
 })();
