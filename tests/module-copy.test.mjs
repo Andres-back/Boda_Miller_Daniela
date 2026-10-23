@@ -60,3 +60,46 @@ test('All invitation modules render upgraded copy without missing labels', async
     assert.doesNotMatch(html, /undefined|\$\{/, module.id);
   }
 });
+
+test('Public copy initializes all desktop and mobile links without aborting invitation rendering', async () => {
+  const source = await readFile(new URL('../app.js', import.meta.url), 'utf8');
+  const start = source.indexOf('  function syncPublicCopy() {');
+  const end = source.indexOf('  function switchTab(', start);
+  const content = upgrade(structuredClone(original));
+  const cover = content.modules.find(module => module.id === 'hero');
+  const rsvp = content.modules.find(module => module.id === 'rsvp');
+  cover.uiNav = 'Our invitation';
+  rsvp.uiNav = 'Reply to the couple';
+  rsvp.uiDock = 'Reply';
+  const makeLink = (id, { mobile = false, cta = false } = {}) => {
+    const label = { textContent: 'Old label' };
+    return {
+      dataset: { moduleLink: id }, textContent: 'Old link', label,
+      closest: selector => selector === '.mobile-dock' && mobile ? {} : null,
+      classList: { contains: name => name === 'nav-rsvp' && cta },
+      querySelector: selector => selector === 'span' ? label : null
+    };
+  };
+  const desktop = makeLink('hero');
+  const cta = makeLink('rsvp', { cta: true });
+  const mobile = makeLink('rsvp', { mobile: true });
+  const unknown = makeLink('unknown');
+  const links = [desktop, cta, mobile, unknown];
+  const selectors = ['footer>p', 'footer>small', '.reopen-invitation', '.envelope-letter>span', '.envelope-letter>p', '.invitation-touch', '.invitation-skip', '#letter-dialog>.eyebrow', '.letter-signature'];
+  const elements = new Map(selectors.map(selector => [selector, { textContent: '' }]));
+  const sync = vm.runInNewContext(source.slice(start, end) + '\nsyncPublicCopy;', {
+    content,
+    $: selector => selector === '[data-module-link]' ? links[0] : elements.get(selector),
+    $$: selector => selector === '[data-module-link]' ? links : []
+  });
+  const before = JSON.stringify(content);
+  assert.doesNotThrow(sync);
+  assert.equal(desktop.textContent, cover.uiNav);
+  assert.equal(cta.textContent, rsvp.uiNav);
+  assert.equal(mobile.label.textContent, rsvp.uiDock);
+  assert.equal(mobile.textContent, 'Old link', 'Keep mobile icon markup intact.');
+  assert.equal(unknown.textContent, 'Old link');
+  assert.equal(elements.get('footer>p').textContent, cover.uiFooter);
+  assert.equal(elements.get('.letter-signature').textContent, content.modules.find(module => module.id === 'welcome').uiLetterSignature);
+  assert.equal(JSON.stringify(content), before, 'Rendering must not change persisted content.');
+});

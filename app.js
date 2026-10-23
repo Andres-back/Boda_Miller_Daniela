@@ -288,7 +288,7 @@
   }
   function syncPublicCopy() {
     const cover = content.modules.find(m => m.id === 'hero'), letter = content.modules.find(m => m.id === 'welcome');
-    $('[data-module-link]').forEach(link => {
+    $$('[data-module-link]').forEach(link => {
       const m = content.modules.find(m => m.id === link.dataset.moduleLink);
       if (!m) return;
       if (link.closest('.mobile-dock')) link.querySelector('span').textContent = m.uiDock ?? m.uiNav;
